@@ -11,6 +11,10 @@ import Livro from './LivroApp'
 import Cliente from './ClienteApp'
 import Venda from './VendaApp'
 import Autor from './AutorApp'
+import Editora from './EditoraApp'
+
+
+
 
 import {Route,Link,BrowserRouter as Router,Routes } from 'react-router-dom'
 
@@ -23,7 +27,8 @@ const routing = ( <Router ><div><h1>  React Router Example</h1>
 
                                                                         <Link to="/Cliente">Cadastro de Cliente</Link>
                                                                              <Link to="/Venda">Registro de venda</Link>
-                                                                              <Link to="/Autor">Registro de venda</Link>
+                                                                              <Link to="/Autor">Cadastro de Autor</Link>
+                                                                               <Link to="/Editora">Cadastro de Editora</Link>
                                                                       <Routes> 
 
 
@@ -32,6 +37,7 @@ const routing = ( <Router ><div><h1>  React Router Example</h1>
                                                                     <Route path="/Cliente"  element={<Cliente/>}/>
                                                                       <Route path="/Venda" element={<Venda/>}/>
                                                                          <Route path="/Autor" element={<Autor/>}/>
+                                                                           <Route path="/Editora" element={<Editora/>}/>
                                                                   </Routes>
 
 
