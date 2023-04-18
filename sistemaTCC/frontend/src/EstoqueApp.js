@@ -185,7 +185,6 @@ this.setState(novostate);
 
 
 
-                                                        <h2  style={{ color :"gray", fontFamily:"Georgia"}}>Estoque de Livro</h2><br/><br/>
                                                         
                                                         <h2  style={{ color :"gray", fontFamily:"Times"}}>Estoque de Livro</h2><br/><br/>
                                                       <h3> Informações Cadastrais</h3>

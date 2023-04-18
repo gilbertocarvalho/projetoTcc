@@ -12,25 +12,14 @@ import React from "react";
 
 
 
-class Estoque extends React.Component{
+class Autor extends React.Component{
 
 state = {
                  
-                 livro: {
-
-                                               
-
- 
-                                               titulo : "",
-
-                                              isbn : "",
-                                               
-                                              preco : "",
-
-                  },
-                cliente:{
+              
+                autor:{
                  nome :"",      
-                  cpf:"",
+                 
 
 
               },
@@ -94,13 +83,9 @@ this.setState(novostate);
 
 RegistrarOperacao(){
 
-this.state.movimentacao.livro = this.state.livro; 
-
-var operacao  = document.getElementById('entrada');
 
 
-if(operacao.checked){
-      const apiURL = 'http://192.168.18.6:8080/Estoque/adicionarentrada';
+      const apiURL = 'http://192.168.18.6:8080/Autor/adicionar';
 
          fetch(apiURL, { 
                      method : 'POST' ,
@@ -108,7 +93,7 @@ if(operacao.checked){
                                    Accept : 'text/plain',
                                   'Content-Type' :'application/json'
                    },
-                   body : JSON.stringify(this.state.movimentacao)}).then(
+                   body : JSON.stringify(this.state.autor)}).then(
                      (response)=>{
 
                        console.log(response);
@@ -117,24 +102,6 @@ if(operacao.checked){
 }
               );
 
-}else{
-      const apiURL = 'http://192.168.18.6:8080/Estoque/adicionarsaida';
-
-         fetch(apiURL, { 
-                     method : 'POST' ,
-                     headers : {
-                                   Accept : 'text/plain',
-                                  'Content-Type' :'application/json'
-                   },
-                   body : JSON.stringify(this.state.movimentacao)}).then(
-                     (response)=>{
-
-                       console.log(response);
-                      
-
-}
-              );
-}
 
 
 console.log(this.state.venda
@@ -188,7 +155,7 @@ this.setState(novostate);
 
                                                       
                                                         
-                                                        <h2  style={{ color :"gray", fontFamily:"Times"}}>Cadastro de Autores</h2><br/><br/>
+                                                        <h2  style={{ color :"gray", fontFamily:"Times"}}>Cadastro de Autores </h2><br/><br/>
                                                       <h3> Informações Cadastrais</h3>
                           
                                 <label>Nome :</label>
@@ -196,10 +163,15 @@ this.setState(novostate);
 
  
                               
-                                            <input type="text"  className="form-control"  id="textisbn" value={this.state.livro.isbn} placeholder="digite o nome" onChange={(novotexto) => {this.inputChange("livro","isbn",novotexto.target.value)}}/><br/>
-                              <input type="button" className="btn btn-primary" value="adicionar livro  " onClick={() =>this.pesquisarlivro()}/ ><br/><br/>
+                                            <input type="text"  className="form-control"  id="textisbn" value={this.state.autor.nome} placeholder="digite o nome do autor" onChange={(novotexto) => {this.inputChange("autor","nome",novotexto.target.value)}}/><br/>
+                              <input type="button" className="btn btn-primary" value="adicionar autor " onClick={() =>this.RegistrarOperacao()}/ ><br/><br/>
                          
   
+
+
+
+
+ {this.BotaoListar()}
                                       
                                      <br/><br/>
                          
@@ -407,7 +379,7 @@ organizarcabecalho(){
 
 if(this.state.opcaolista==0){
 
-return( <thead>  <th>ISBN</th> <th>Titulo</th> <th>Data           </th> <th>Hora           </th><th>quantidade </th></thead>);
+return( <thead>  <th>Nome;</th></thead>);
 
 
 }else{
@@ -426,23 +398,17 @@ return(<thead><th>ISBN</th> <th>Titulo</th>          <th>quantidade </th></thead
 
 organizarlista(i){
 
- 
-if(this.state.opcaolista==0){
-
-return(<tr><td>{this.state.lista[i].livro.isbn}</td>     <td>{this.state.lista[i].livro.titulo}</td>     <td>{this.state.lista[i].data}</td>  <td>{this.state.lista[i].hora}</td>   <td>{this.state.lista[i].quantidade}</td> </tr>);
 
 
-}else{
-
-return(<tr ><td>{this.state.lista[i].isbn}</td>     <td>{this.state.lista[i].titulo}</td>     <td>{this.state.lista[i].quantidade}</td></tr>  );
+return(<tr><td>{this.state.lista[i].nome}</td>  </tr>);
 
 
-}
 
 
 
 
 }
+
 
 
 
@@ -450,14 +416,9 @@ return(<tr ><td>{this.state.lista[i].isbn}</td>     <td>{this.state.lista[i].tit
 listar(){
                                   
 
-var operacao  = document.getElementById('listarentrada');
 
 
-var operacao2 =  document.getElementById('listarsaida');
-
-if(operacao.checked){
-
-              const url = "http://192.168.18.6:8080/Estoque/listarentrada" ;
+              const url = "http://192.168.18.6:8080/Autor/listar" ;
 
            axios.get(url,{responseType : 'json',}).then(
 
@@ -468,32 +429,6 @@ if(operacao.checked){
 
 
                   
-
-
-                   novostate.opcaolista =0;
-                 novostate.lista = response.data;
-
-                this.setState(novostate);                   
-                console.log(response.data) 
-              }
-
-           );
- 
-            console.log("vinho Adicionados pesquisar acionado");  
-}else if (operacao2.checked){
-
-
-              const url = "http://192.168.18.6:8080/Estoque/listarsaida" ;
-
-           axios.get(url,{responseType : 'json',}).then(
-
-              (response)=> {  
-
-
-                  const novostate = {...this.state};
-
-
-                      novostate.opcaolista =0;
                  novostate.lista = response.data;
 
                 this.setState(novostate);                   
@@ -503,33 +438,6 @@ if(operacao.checked){
            );
  
             console.log("vinho Adicionados pesquisar acionado");  
-
-}else{
-
-         const url = "http://192.168.18.6:8080/Livro/listar" ;
-
-           axios.get(url,{responseType : 'json',}).then(
-
-              (response)=> {  
-
-
-                  const novostate = {...this.state};
-
-
-                  novostate.opcaolista =1;
-                 novostate.lista = response.data;
-
-                this.setState(novostate);                   
-                console.log(response.data)
-
-   
-              }
-
-           );
-                    
-            console.log("vinho Adicionados pesquisar acionado");  
-
-}
 
 }
  
@@ -654,7 +562,7 @@ function Render(){
           return (
            <div className="container">
               {Cabecalho()} 
-            <Estoque/>
+            <Autor/>
         
             
 

@@ -10,6 +10,22 @@ import React from "react";
 
 class Livro extends React.Component{
 
+
+constructor(props){
+
+
+super(props);
+
+
+}
+
+
+
+
+
+
+
+
 state = {
                  
                  livro: {
@@ -22,12 +38,24 @@ state = {
                                               isbn : "",
                                                
                                               preco : "",
+                                          
+                                             autores : [],
+
+                                            editora: "",
                   },
 
                  
              pesquisar : "",
 
              lista:  [],
+
+          listadeautores: [],
+
+         listadeeditoras:[],
+
+            listou:0,
+
+          listoueditora:0,
 
             botao: "primeira"
 };
@@ -49,7 +77,17 @@ this.setState(novostate);
 
 Adicionar1(){
 
+  const novostate = {...this.state};
+var select =document.getElementById('selecteditora');
 
+
+var value = select.options[select.selectedIndex].value;
+
+
+
+this.state.livro.editora = this.state.listadeeditoras[value];
+
+console.log(this.state.livro);
 this.state.livro.preco = this.state.livro.preco.replace(",",".");
       const apiURL = 'http://192.168.18.6:8080/Livro/adicionar';
 
@@ -119,8 +157,13 @@ this.setState(novostate);
                                                 <label>preço:</label>
                                             <input type="text"  className="form-control"  id="textpreco" value={this.state.livro.preco} placeholder="digite o preço" onChange={(novotexto) => {this.inputChange("preco",novotexto.target.value)}}/><br/>
              
-                                          
-
+                                         <label>autor: </label> <br/>
+                 
+                                            {this.listadeautores()}
+                                                {this.BotaoAdicionarAutor()}
+                                         {this.listarautoreslivro()}
+                                   
+ {this.listadeeditoras()}
                                           <input type="button" className="btn btn-primary" value="adicionar" onClick={() =>this.Adicionar1()}/ >
                                          {this.BotaoListar()}
 
@@ -145,11 +188,17 @@ this.setState(novostate);
 
 
 
-AlterarMedicos(){
+adicionarautorlivro(){
+   const novostate = {...this.state};
+var select =document.getElementById('selectautor');
 
-             const novostate = {...this.state};
 
-           novostate.lista[0].nome = "paulo";
+var value = select.options[select.selectedIndex].value;
+
+novostate.livro.autores.push(this.state.listadeautores[value]);
+       
+
+           
            this.setState(novostate);
 
 }
@@ -161,6 +210,12 @@ BotaoListar(){
 
 }
 
+BotaoAdicionarAutor(){
+     
+       return(<input type='button'   className="btn btn-primary"  value='Adicionar autor' id='borao' onClick={ () =>{this.adicionarautorlivro()}}/>);
+
+
+}
 
 BotaoPesquisar(){
      
@@ -171,7 +226,7 @@ BotaoPesquisar(){
 
 salvaralteracao(de ,  botaoidr,botaoid,i){
 document.getElementById(de).disabled=  true  ; 
- 
+ this.state.lista[i].preco = this.state.lista[i].preco.replace(",",".");
 
    const url = "http://192.168.18.6:8080/Livro/editar/" +  this.state.lista[i].preco + "," +   this.state.lista[i].isbn;
 
@@ -243,6 +298,247 @@ document.getElementById(botaoid).hidden = false;
 }
 
 
+listarautores(){
+                                  
+
+             
+
+              const url = "http://192.168.18.6:8080/Autor/listar" ;
+
+           axios.get(url,{responseType : 'json',}).then(
+
+              (response)=> {  
+
+
+                  const novostate = {...this.state};
+
+
+                  
+                 novostate.listadeautores = response.data;
+
+                this.setState(novostate);                   
+                console.log(response.data)
+              }
+
+           );
+ 
+            console.log("vinho Adicionados pesquisar acionado");  
+
+}
+ 
+
+
+listareditoras(){
+                                  
+
+             
+
+              const url = "http://192.168.18.6:8080/Editora/listar" ;
+
+           axios.get(url,{responseType : 'json',}).then(
+
+              (response)=> {  
+
+
+                  const novostate = {...this.state};
+
+
+                  
+                 novostate.listadeeditoras = response.data;
+
+                this.setState(novostate);                   
+                console.log(response.data)
+              }
+
+           );
+ 
+            console.log("vinho Adicionados pesquisar acionado");  
+
+}
+ 
+
+
+
+
+
+
+
+
+listadeeditoras(){
+
+                    
+            if(this.state.listoueditora==0){
+
+               {this.listareditoras()}
+        
+                      const novostate = {...this.state};
+
+
+                  
+                 novostate.listoueditora= 1;
+
+                this.setState(novostate);     
+            
+           
+
+}
+              const listalivro = [];
+
+            for(let i=0;i < this.state.listadeeditoras.length;i++)
+{
+
+
+
+                 listalivro.push (
+                                     
+
+
+                      
+
+                                         <option value={i }  >{this.state.listadeeditoras[i].nome}</option> 
+
+
+
+
+
+                                                         );
+
+
+
+}
+
+  return(
+                       <select name="autor" className="form-control"  id="selecteditora">
+
+
+{listalivro}
+                           
+                   </select>
+);
+
+
+
+}
+
+listadeautores(){
+
+                    
+            if(this.state.listou==0){
+
+               {this.listarautores()}
+        
+                      const novostate = {...this.state};
+
+
+                  
+                 novostate.listou= 1;
+
+                this.setState(novostate);     
+            
+           
+
+}
+              const listalivro = [];
+
+            for(let i=0;i < this.state.listadeautores.length;i++)
+{
+
+
+
+                 listalivro.push (
+                                     
+
+
+                      
+
+                                         <option value={i }  >{this.state.listadeautores[i].nome}</option> 
+
+
+
+
+
+                                                         );
+
+
+
+}
+
+  return(
+                       <select name="autor" className="form-control"  id="selectautor">
+
+
+{listalivro}
+                           
+                   </select>
+);
+
+
+
+}
+
+listarautoreslivro(){
+          
+
+              const listalivro = [];
+
+
+         
+            for(let i=0;i <this.state.livro.autores.length
+;i++)
+{
+  let de =  i + "editar";
+
+
+
+let textobotao = "editar";
+
+ let botaoid =  i + "botaoe" ;
+
+let botaoidr = i + "botaor";
+
+let botaoidx = i + "botaox";
+
+ const status = {...this.state};
+
+let primeira = true;
+
+
+
+
+
+                 listalivro.push (
+
+                                     
+<tr><td>{this.state.livro.autores[i].nome}</td>  </tr>
+                                  
+                      
+                                                  
+
+
+
+
+
+                                                        );
+ 
+
+}
+
+  return(<div>
+                           <table className="table table-stripped">
+                      <thead>  <th>Nome;</th></thead>
+
+                          <tbody>
+                      {listalivro}
+                            </tbody>
+                                                           
+                             </table>
+  </div>);
+
+
+
+}
+
+
 
 
 
@@ -273,6 +569,8 @@ let botaoidx = i + "botaox";
 
 let primeira = true;
 
+             {this.listarautores()}
+          {this.listar()}
 let de2  =  "" + status.lista[i].preco;
                  listalivro.push (<tr key={i}>
                                      
@@ -312,7 +610,7 @@ let de2  =  "" + status.lista[i].preco;
 listar(){
                                   
 
-
+            
 
               const url = "http://192.168.18.6:8080/Livro/listar" ;
 
